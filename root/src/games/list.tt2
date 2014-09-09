@@ -1,0 +1,39 @@
+[% # This is a TT comment. -%]
+
+[%- # Provide a title -%]
+[% META title = 'View Games' -%]
+
+[% # Note That the '-' at the beginning or end of TT code  -%]
+[% # "chomps" the whitespace/newline at that end of the    -%]
+[% # output (use View Source in browser to see the effect) -%]
+
+[% BLOCK set_label_status %]
+    [% IF game.status == "IN PROGRESS" %]
+        [% SET label_status = "primary" %]
+    [% ELSIF game.status == "CANCELLED" %]
+        [% SET label_status = "danger" %]
+    [% ELSIF game.status == "CONFIRMED" %]
+        [% SET label_status = "success" %]
+    [% ELSE %]
+        [% SET label_status = "default" %]
+    [% END %]
+[% END %]
+
+[% # Some basic HTML with a loop to display books -%]
+<table class="table table-striped">
+<tr class="info"><th>Name</th><th>Status</th><th>Game Details</th><th>Delete</th><th>Invite</th></tr>
+[% # Display each game in a table row %]
+[% FOREACH game IN games -%]
+    [% PROCESS set_label_status( game.status ) %]
+    [% # <tr class="active">...</tr> -%]
+  <tr>
+    <td>[% game.name %]</td>
+    <td><span class="label label-[% label_status %]">[% game.status %]</span></td>
+    <td><a href="[%
+        c.uri_for(c.controller.action_for('view'), [game.id]) %]">View</a></td></td>
+    <td><a href="[%
+        c.uri_for(c.controller.action_for('delete'), [game.id]) %]">Delete</a></td>
+    <td><button type="button" class="btn btn-success">Invite players</button></td>
+  </tr>
+[% END -%]
+</table>

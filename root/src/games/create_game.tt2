@@ -1,0 +1,22 @@
+[% META title = 'Create a game' -%]
+
+<form role="form" method="post" action="[% c.uri_for('form_create_do') %]">
+    <div class="form-group">
+        <label for="create_game_name">Game Name</label>
+        <input type="game_name" name="game_name" class="form-control" id="create_game_name_1" placeholder="Enter game name">
+    </div>
+
+    <div class="form-group has-feedback" id="datetimepicker1">
+        <label for="create_game_scheduled">Scheduled</label>
+        <input data-format="dd/MM/yyyy" class="form-control" type="text" name="scheduled_for"></input>
+        <span class="add-on">
+            <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+        </span>
+    </div>
+<script type="text/javascript">
+
+        </script>
+
+  <button type="submit" class="btn btn-default" name="Submit">Submit</button>
+</form>
+

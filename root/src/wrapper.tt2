@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" [%#
+    %]"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>[% template.title or "My Catalyst App!" %]</title>
+<link rel="stylesheet" href="[% c.uri_for('/static/css/main.css') %]" />
+<link href="http://getbootstrap.com/examples/theme/theme.css" rel="stylesheet">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen"
+     href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body role="document">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="[% c.uri_for('/') %]">Book a Pitch</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="[% c.uri_for('/games/list') %]">View all Games</a></li>
+            <li><a href="[% c.uri_for('/games/create') %]">Create Game</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          [% IF c.user_exists %]
+          <div id="sign-on_btns" class="navbar-form navbar-right">
+            <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+              Hello [% c.user.first_name %]<span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="[% c.uri_for('/players/id', c.user.id, 'view_profile') %]">View Profile</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+            </ul>
+            <a href="[% c.uri_for('/logout') %]" id="sign_out" type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Sign Out" role="button">
+                Sign Out
+            </a>
+          </div>
+          [% ELSE %]
+          <div id="sign-on_btns" class="navbar-form navbar-right">
+            <a href="[% c.uri_for('/login') %]"" id="sign_in" type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Sign In" role="button">
+                Sign In
+            </a>
+
+            <a href="[% c.uri_for('/players/register') %]"" id="register_user" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Register" role="button">
+                <span class="glyphicon glyphicon-user"></span>
+            </a>
+
+          </div>
+          [% END %]
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div id ="feedback">
+    [% IF feedback_error %]
+        <div class="alert alert-danger" role="alert">
+            [% feedback_error %]
+        </div>
+    [% ELSIF feedback_success %]
+        <div class="alert alert-success" role="alert">
+            [% feedback_success %]
+        </div>
+    [% ELSE %]
+    [% END %]
+    </div>
+
+    <div class="container theme-showcase" role="main">
+      [% content %]
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+
+
+    </div> <!-- /container -->
+    <script type="text/javascript"
+     src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+     <script src="[% c.uri_for('/static/javascript/main.js') %]"></script>
+     <script type="text/javascript" src="[% c.uri_for('/static/js/main.js') %]"></script>
+
+    [% IF script %]
+        <script type="text/javascript">
+    [% script %]
+        </script>
+    [% END %]
+</body>
+</html>

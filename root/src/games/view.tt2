@@ -1,0 +1,13 @@
+[%- # Provide a title -%]
+[% META title = 'View Game' -%]
+
+<table class="table">
+<tr><td class="warning">Game</td><td>[% game.name %]</td></tr>
+<tr><td class="warning">Scheduled for</td><td>[% game.scheduled %]</td></tr>
+<tr><td class="warning">Status</td><td>[% game.status %]</td></tr>
+<tr><td class="warning">Created</td><td>[% game.created %]</td></tr>
+<tr><td class="warning">Last Updated</td><td>[% game.updated %]</td></tr>
+</table>
+
+<a href="[% c.uri_for(c.controller.action_for('delete'), [game.id]) %]"
+    class="btn btn-danger">Delete Game</a>

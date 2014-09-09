@@ -1,0 +1,48 @@
+[% # Use the TT Dumper plugin to Data::Dumper variables to the browser   -%]
+[% # Not a good idea for production use, though. :-)  'Indent=1' is      -%]
+[% # optional, but prevents "massive indenting" of deeply nested objects -%]
+[% USE Dumper(Indent=1) -%]
+
+[% # Set the page title.  META can 'go back' and set values in templates -%]
+[% # that have been processed 'before' this template (here it's updating -%]
+[% # the title in the root/src/wrapper.tt2 wrapper template).  Note that -%]
+[% # META only works on simple/static strings (i.e. there is no variable -%]
+[% # interpolation -- if you need dynamic/interpolated content in your   -%]
+[% # title, set "$c->stash(title => $something)" in the controller).     -%]
+[% META title = 'Player Created' %]
+
+<div class="row">
+    <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+     <div class="well profile clearfix">
+        <div class="col-sm-12">
+            <div id="profile" class="col-xs-12 col-sm-8">
+                <h2>Hola! [% player.first_name %] [% player.last_name %]</h2>
+                <p><span class="glyphicon glyphicon-envelope"></span><strong> Email: </strong> [% player.email_address %] </p>
+                <p><span class="glyphicon glyphicon-phone"></span><strong> Mobile: </strong> [% player.mobile %] </p>
+                <p><strong>Profile created: </strong> [% player.created.ymd %] </p>
+            </div>
+            <div class="col-xs-12 col-sm-4 text-center">
+                <figure>
+                    [% IF player.image_url %]
+                        <img src="[% c.uri_for('/static/images/', player.image_url) %]" alt="" class="img-circle img-responsive">
+                    [% ELSE %]
+                        <img src="[% c.uri_for('/static/images/camera.png') %]" alt="" class="img-circle img-responsive">
+                    [% END %]
+                </figure>
+            </div>
+        </div>
+        <div class="col-xs-12 divider text-center">
+            <div class="col-xs-12 col-sm-4 emphasis">
+                <h2><strong> 20,7K </strong></h2>
+                <p><small>Games played</small></p>
+                <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Follow </button>
+            </div>
+            <div class="col-xs-12 col-sm-4 emphasis">
+                <h2><strong>245</strong></h2>
+                <p><small>Games declined</small></p>
+                <button class="btn btn-info btn-block"><span class="fa fa-user"></span> View Profile </button>
+            </div>
+            <div class="col-xs-12 col-sm-4 emphasis">
+                <h2><strong>43</strong></h2>
+                <p><small>Snippets</small></p>
+                <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Follow </button>
