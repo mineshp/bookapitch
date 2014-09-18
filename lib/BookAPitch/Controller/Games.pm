@@ -3,6 +3,8 @@ use Moose;
 use namespace::autoclean;
 use Try::Tiny;
 use Data::Printer;
+use DateTime;
+use DateTime::Format::Strptime qw( );
 
 BEGIN { extends 'Catalyst::Controller'; }
 
@@ -114,15 +116,38 @@ sub form_create_do :Chained('base') :PathPart('form_create_do') :Args(0) {
     my $name      = $c->request->params->{game_name};
     my $game_date = $c->request->params->{scheduled_for};
 
+    # Convert string date from form to DateTime object.
+    my $format = DateTime::Format::Strptime->new(
+        pattern   => '%d/%m/%Y',
+        time_zone => 'local',
+        on_error  => 'croak',
+    );
+
+    my $game_scheduled_dt = $format->parse_datetime($game_date);
+
+    my $guard = $c->model('BookAPitchDB')->txn_scope_guard;
     # Create the game
-    my $game = $c->model('BookAPitchDB::Game')->create({
+    my $game;
+
+    # Check if game name already exists.
+    # TODO:
+
+
+    $game = $c->model('BookAPitchDB::Game')->create({
         name   => $name,
-        scheduled => $game_date,
+        scheduled => $game_scheduled_dt,
     });
+
+    # Add all active users to the game.
+    # With a default player_status of PENDING.
+    $game->add_players_to_game;
+
+    # Commit changes
+    $guard->commit;
 
     # Store new model object in stash and set template
     $c->stash(
-        game     => $game
+        game     => $game,
     );
 
     # TODO: Method to display feedback messages
@@ -132,8 +157,10 @@ sub form_create_do :Chained('base') :PathPart('form_create_do') :Args(0) {
             $game->name, $game->scheduled) if $game;
 
     # Redirect the user back to the view game page with status msg as an arg
-    $c->response->redirect($c->uri_for($self->action_for('view'),
-        {id => $game->id, status_msg => "Game created."}));
+    $c->response->redirect($c->uri_for(
+        $c->controller('Games')->action_for('view'),
+        [$game->id]
+    ));
 }
 
 =head2 View
@@ -147,9 +174,16 @@ sub view :Chained('object') :PathPart('view') :Args(0) {
 
     # stash object contains the game row.
 
+    my @invited_players = $c->stash->{object}->game_players;
+
     $c->stash({
         game => $c->stash->{object},
         template => 'games/view.tt2',
+        invited_players  => {
+            available   => $c->stash->{object}->available_players,
+            unavailable => $c->stash->{object}->unavailable_players,
+            pending     => $c->stash->{object}->pending_players,
+        },
     });
 }
 
@@ -187,8 +221,12 @@ sub invite_players :Chained('object') :PathPart('invite') :Args(0) {
     # Find all active users
     my $all_users = $c->model('BookAPitchDB::Users')->active_users;
 
+    # Build list of players to email.
+    # Only email if they have not replied, if they are not available
+    # we don't want to hound them.
     $c->log->debug("Sending emails to the following users: ");
     foreach ( $all_users ) {
+        next unless $
         $c->log->debug($_->email_address)
     }
     $c->log->debug("_____________END_______________");

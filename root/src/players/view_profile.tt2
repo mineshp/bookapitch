@@ -17,8 +17,8 @@
         <div class="col-sm-12">
             <div id="profile" class="col-xs-12 col-sm-8">
                 <h2>Hola! [% player.first_name %] [% player.last_name %]</h2>
-                <p><span class="glyphicon glyphicon-envelope"></span><strong> Email: </strong> [% player.email_address %] </p>
-                <p><span class="glyphicon glyphicon-phone"></span><strong> Mobile: </strong> [% player.mobile %] </p>
+                <p><span class="glyphicon glyphicon-envelope"></span> [% player.email_address %] </p>
+                <p><span class="glyphicon glyphicon-phone"></span> [% player.mobile %] </p>
                 <p><strong>Profile created: </strong> [% player.created.ymd %] </p>
             </div>
             <div class="col-xs-12 col-sm-4 text-center">

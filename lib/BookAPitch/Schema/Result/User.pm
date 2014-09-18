@@ -198,16 +198,19 @@ __PACKAGE__->add_columns(
     },
 );
 
-=head active_users
+=head2 fullname
 
-Get all active users
+Helper method to concatenate first name and last name.
 
 =cut
-sub active_users {
-  my ($self, $c) = @_;
+sub fullname {
+    my ( $self ) = @_;
 
-    return $self->search({ active => 1 })->all;
+    my $fullname = sprintf("%s %s", $self->first_name, $self->last_name);
+    warn "FN " . $fullname;
+    return $fullname;
 }
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

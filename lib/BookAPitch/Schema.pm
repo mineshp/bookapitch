@@ -14,6 +14,10 @@ __PACKAGE__->load_namespaces;
 # Created by DBIx::Class::Schema::Loader v0.07014 @ 2014-07-23 10:41:41
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iQTuC+LnVbIXVO/pyxxXow
 
+__PACKAGE__->load_namespaces(
+    result_namespace => 'Result',
+    resultset_namespace => 'ResultSet',
+);
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);

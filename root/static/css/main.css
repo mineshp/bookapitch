@@ -138,3 +138,9 @@ span.tags
     margin-left: -10px;
     z-index: 10;
 }
+
+.is_playing
+{
+    margin-top: 20px;
+
+}

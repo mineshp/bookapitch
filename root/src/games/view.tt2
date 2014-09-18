@@ -1,13 +1,73 @@
 [%- # Provide a title -%]
 [% META title = 'View Game' -%]
 
-<table class="table">
-<tr><td class="warning">Game</td><td>[% game.name %]</td></tr>
-<tr><td class="warning">Scheduled for</td><td>[% game.scheduled %]</td></tr>
-<tr><td class="warning">Status</td><td>[% game.status %]</td></tr>
-<tr><td class="warning">Created</td><td>[% game.created %]</td></tr>
-<tr><td class="warning">Last Updated</td><td>[% game.updated %]</td></tr>
-</table>
+[% BLOCK set_player_status_label %]
+    [% IF game_player.player_status == "PENDING" %]
+        [% SET label_status = "warning" %]
+    [% ELSIF game_player.player_status == "UNAVAILABLE" %]
+        [% SET label_status = "danger" %]
+    [% ELSIF game_player.player_status == "AVAILABLE" %]
+        [% SET label_status = "success" %]
+    [% ELSE %]
+        [% SET label_status = "default" %]
+    [% END %]
+[% END %]
 
-<a href="[% c.uri_for(c.controller.action_for('delete'), [game.id]) %]"
-    class="btn btn-danger">Delete Game</a>
+[% BLOCK show_player_game_status %]
+[% FOREACH player_status_type IN invited_players.keys %]
+<h5>[% player_status_type FILTER ucfirst %] Players</h5>
+<table class="table">
+    <tbody>
+        [% FOREACH game_player IN invited_players.$player_status_type %]
+        [% PROCESS set_player_status_label( game_player.player_status ) %]
+        <tr>
+            <td>
+                <span class="glyphicon glyphicon-user"></span>
+            </td>
+            <td>[% game_player.player.fullname %]</td>
+            <td>
+                <span class="label label-[% label_status %]">[% game_player.player_status %]</span>
+            </td>
+        </tr>
+        [% END %]
+        [% UNLESS invited_players.$player_status_type.size > 0 %]
+            <tr><td>No players found!</td></tr>
+        [% END %]
+    </tbody>
+</table>
+[% END %]
+[% END %]
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            [% PROCESS show_player_game_status %]
+        </div>
+        <div class="col-md-8">
+            <h4>[% game.name %]</h4>
+            <table class="table table-user-information">
+                <tbody>
+                      <tr>
+                        <td>Scheduled:</td>
+                        <td>[% game.scheduled.ymd %]</td>
+                      </tr>
+                      <tr>
+                        <td>Status:</td>
+                        <td>[% game.status %]</td>
+                      </tr>
+                      <tr>
+                        <td>Created:</td>
+                        <td>[% game.created %]</td>
+                      </tr>
+                      <tr>
+                        <td>Last updated:</td>
+                        <td>[% game.updated %]</td>
+                      </tr>
+                </tbody>
+            </table>
+
+            <a href="[% c.uri_for(c.controller.action_for('delete'), [game.id]) %]"
+                class="btn btn-danger">Delete Game</a>
+        </div>
+    </div>
+</div>

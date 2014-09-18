@@ -119,14 +119,6 @@ sub submit_registration :Chained('base') :PathPart('submit_registration') :Args(
     $c->response->redirect(
         $c->uri_for($c->controller('Login')->action_for('index')),
     );
-=pod
-    # Redirect the user back to the view game page with status msg as an arg
-    $c->response->redirect(
-        $c->uri_for($self->action_for('view_profile'),
-            { id => $user->id }
-        )
-    );
-=cut
 }
 
 

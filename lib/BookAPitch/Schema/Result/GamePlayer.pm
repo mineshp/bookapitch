@@ -104,13 +104,13 @@ __PACKAGE__->belongs_to(
 
 Type: belongs_to
 
-Related object: L<BookAPitch::Schema::Result::Player>
+Related object: L<BookAPitch::Schema::Result::User>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "player",
-  "BookAPitch::Schema::Result::Player",
+  "BookAPitch::Schema::Result::User",
   { id => "player_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );

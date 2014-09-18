@@ -24,20 +24,17 @@ Catalyst Controller.
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
-warn "IN index";
+
     # Get the username and password from form
     my $username = $c->request->params->{username};
     my $password = $c->request->params->{password};
-warn "USername is " . $username;
-warn "Password is " . $password;
+
     # If the username and password values were found in form
     if ($username && $password) {
         # Attempt to log the user in
         if ($c->authenticate({ username => $username,
                                    password => $password  } )) {
             # If successful, then let them use the application
-            warn "USER ";
-            warn  p $c->user->id;
             $c->response->redirect($c->uri_for(
                 $c->controller('Players')->action_for('view_profile'),
                 [$c->user->id]));
