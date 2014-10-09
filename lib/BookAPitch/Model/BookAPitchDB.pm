@@ -3,11 +3,13 @@ package BookAPitch::Model::BookAPitchDB;
 use strict;
 use base 'Catalyst::Model::DBIC::Schema';
 
+my $dsn = $ENV{APP_DB} ||= 'dbi:Pg:dbname=bookapitchdb';
+warn "IN HERE ";
 __PACKAGE__->config(
     schema_class => 'BookAPitch::Schema',
-    
+
     connect_info => {
-        dsn => 'dbi:Pg:dbname=bookapitchdb',
+        dsn => $dsn,
         user => 'bookapitchuser',
         password => 'Wednesday730',
         AutoCommit => q{1},

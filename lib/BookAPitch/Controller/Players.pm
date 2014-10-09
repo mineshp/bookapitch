@@ -127,14 +127,15 @@ sub submit_registration :Chained('base') :PathPart('submit_registration') :Args(
 View a game
 
 =cut
-
+use Data::Printer;
 sub view_profile :Chained('object') :PathPart('view_profile') :Args(0) {
     my ($self, $c) = @_;
 warn "IN View Profile";
     # stash object contains the player row.
-
+warn "GAME is " . $c->model('BookAPitchDB::Game')->next_game->first;
     $c->stash({
         player => $c->stash->{object},
+        next_game => $c->model('BookAPitchDB::Game')->next_game->first,
         template => 'players/view_profile.tt2',
     });
 }

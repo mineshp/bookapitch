@@ -28,30 +28,38 @@ sub index :Path :Args(0) {
     # Get the username and password from form
     my $username = $c->request->params->{username};
     my $password = $c->request->params->{password};
-
-    # If the username and password values were found in form
-    if ($username && $password) {
-        # Attempt to log the user in
-        if ($c->authenticate({ username => $username,
-                                   password => $password  } )) {
-            # If successful, then let them use the application
-            $c->response->redirect($c->uri_for(
-                $c->controller('Players')->action_for('view_profile'),
-                [$c->user->id]));
-            return;
+warn "IN index LOGIN.pm";
+    if ( $c->req->method eq 'POST' ) {
+warn "IN POST";
+warn "USER " . $username;
+warn "password " . $password;
+        # If the username and password values were found in form
+        if ($username && $password) {
+            # Attempt to log the user in
+            warn "AUTH " . $c->authenticate({ username => $username, password => $password });
+            if ($c->authenticate({ username => $username,
+                                       password => $password  } )) {
+                warn "REDIRECTING";
+                # If successful, then let them use the application
+                $c->response->redirect($c->uri_for(
+                    $c->controller('Players')->action_for('view_profile'),
+                    [$c->user->id]));
+                return;
+            } else {
+                # Set an error message
+                warn "BAD PWD";
+                $c->stash(error_msg => sprintf("Bad username: %s or password: %s.",
+                    $username, $password));
+            }
         } else {
+            warn "EMPTY PWD";
             # Set an error message
-            warn "BAD PWD";
-            $c->stash(error_msg => "Bad username or password.");
+            $c->stash(error_msg => "Empty username or password.")
+                unless ($c->user_exists);
         }
-    } else {
-        warn "EMPTY PWD";
-        # Set an error message
-        $c->stash(error_msg => "Empty username or password.")
-            unless ($c->user_exists);
+        warn "NO DETAILS SUBMITTED";
+        # If either of above don't work out, send to the login page
     }
-    warn "NO DETAILS SUBMITTED";
-    # If either of above don't work out, send to the login page
     $c->stash(template => 'login.tt2');
 }
 

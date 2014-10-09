@@ -1,12 +1,12 @@
 use utf8;
-package BookAPitch::Schema::Result::GamePlayer;
+package BookAPitch::Schema::Result::Public::UserRole;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-BookAPitch::Schema::Result::GamePlayer
+BookAPitch::Schema::Result::Public::UserRole
 
 =cut
 
@@ -32,92 +32,84 @@ extends 'DBIx::Class::Core';
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "PassphraseColumn");
 
-=head1 TABLE: C<game_players>
+=head1 TABLE: C<user_role>
 
 =cut
 
-__PACKAGE__->table("game_players");
+__PACKAGE__->table("user_role");
 
 =head1 ACCESSORS
 
-=head2 game_id
+=head2 user_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 player_id
+=head2 role_id
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 0
-
-=head2 player_status
-
-  data_type: 'text'
-  default_value: 'PENDING'
   is_nullable: 0
 
 =cut
 
 __PACKAGE__->add_columns(
-  "game_id",
+  "user_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "player_id",
+  "role_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "player_status",
-  { data_type => "text", default_value => "PENDING", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
 
 =over 4
 
-=item * L</game_id>
+=item * L</user_id>
 
-=item * L</player_id>
+=item * L</role_id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("game_id", "player_id");
+__PACKAGE__->set_primary_key("user_id", "role_id");
 
 =head1 RELATIONS
 
-=head2 game
+=head2 role
 
 Type: belongs_to
 
-Related object: L<BookAPitch::Schema::Result::Game>
+Related object: L<BookAPitch::Schema::Result::Public::Role>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "game",
-  "BookAPitch::Schema::Result::Game",
-  { id => "game_id" },
+  "role",
+  "BookAPitch::Schema::Result::Public::Role",
+  { id => "role_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
-=head2 player
+=head2 user
 
 Type: belongs_to
 
-Related object: L<BookAPitch::Schema::Result::User>
+Related object: L<BookAPitch::Schema::Result::Public::User>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "player",
-  "BookAPitch::Schema::Result::User",
-  { id => "player_id" },
+  "user",
+  "BookAPitch::Schema::Result::Public::User",
+  { id => "user_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2014-08-15 14:59:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:y4eytarQ5VpOcvSF+RynWw
+# Created by DBIx::Class::Schema::Loader v0.07014 @ 2014-10-04 18:00:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SODTcRDOkF71RmBCIe+0bA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

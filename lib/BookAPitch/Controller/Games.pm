@@ -86,20 +86,6 @@ sub list :Local {
 
 sub create :Chained('base') :PathPart('create') :Args(0) {
     my ($self, $c) = @_;
-=pod
-    my $game = $c->model('BookAPitch::Game')->create({
-        name => $game_name,
-        status => $status
-    });
-
-    $c->stash({
-        game => $game,
-        template => 'games/game_created.tt2'
-    });
-
-    # Disable caching for this page
-    $c->response->header('Cache-Control' => 'no-cache');
-=cut
 
     $c->stash({ template => 'games/create_game.tt2' });
 }

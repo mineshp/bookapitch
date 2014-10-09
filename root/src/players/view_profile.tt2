@@ -35,12 +35,15 @@
             <div class="col-xs-12 col-sm-4 emphasis">
                 <h2><strong> 20,7K </strong></h2>
                 <p><small>Games played</small></p>
-                <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Follow </button>
+                [% USE Dumper; Dumper.dump(next_game); %]
+                <a href="[% c.uri_for(c.controller.action_for('view'), next_game) %]" class="btn btn-success btn-block">
+                    Next Game
+                </a>
             </div>
             <div class="col-xs-12 col-sm-4 emphasis">
                 <h2><strong>245</strong></h2>
                 <p><small>Games declined</small></p>
-                <button class="btn btn-info btn-block"><span class="fa fa-user"></span> View Profile </button>
+                <button class="btn btn-info btn-block"><span class="fa fa-user"></span>Last Game</button>
             </div>
             <div class="col-xs-12 col-sm-4 emphasis">
                 <h2><strong>43</strong></h2>

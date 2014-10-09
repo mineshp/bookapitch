@@ -38,7 +38,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="[% c.uri_for('/games/list') %]">View all Games</a></li>
             <li><a href="[% c.uri_for('/games/create') %]">Create Game</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="">Next Game</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">

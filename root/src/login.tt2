@@ -1,7 +1,11 @@
 [% META title = 'Login' %]
 
+[% IF error_msg %]
+<div class="alert alert-danger" role="alert">[% error_msg %]</div>
+[% END %]
+
 <!-- Login form -->
-<form class="form-signin" id ="narrow-form" role="form">
+<form class="form-signin" id ="narrow-form" role="form" method="POST">
 <h2 class="form-signin-heading">Please sign in</h2>
 <input type="username" name="username" class="form-control" placeholder="Username" required autofocus>
 <input type="password" name="password" class="form-control" placeholder="Password" required>

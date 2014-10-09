@@ -1,12 +1,12 @@
 use utf8;
-package BookAPitch::Schema::Result::User;
+package BookAPitch::Schema::Result::Public::User;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-BookAPitch::Schema::Result::User
+BookAPitch::Schema::Result::Public::User
 
 =cut
 
@@ -157,24 +157,39 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 game_players
+
+Type: has_many
+
+Related object: L<BookAPitch::Schema::Result::Public::GamePlayer>
+
+=cut
+
+__PACKAGE__->has_many(
+  "game_players",
+  "BookAPitch::Schema::Result::Public::GamePlayer",
+  { "foreign.player_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user_roles
 
 Type: has_many
 
-Related object: L<BookAPitch::Schema::Result::UserRole>
+Related object: L<BookAPitch::Schema::Result::Public::UserRole>
 
 =cut
 
 __PACKAGE__->has_many(
   "user_roles",
-  "BookAPitch::Schema::Result::UserRole",
+  "BookAPitch::Schema::Result::Public::UserRole",
   { "foreign.user_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2014-08-18 20:05:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LNjYCc9lJ8ZaR8XMISkjNA
+# Created by DBIx::Class::Schema::Loader v0.07014 @ 2014-10-04 18:00:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bDRXbXa+COY/IEPUpbuLIA
 
 # many_to_many():
 #   args:
@@ -183,33 +198,6 @@ __PACKAGE__->has_many(
 #     3) Name of belongs_to() relationship in model class of has_many() above
 #   You must already have the has_many() defined to use a many_to_many().
 __PACKAGE__->many_to_many(roles => 'user_roles', 'role');
-
-# Have the 'password' column use a SHA-1 hash and 20-byte salt
-# with RFC 2307 encoding; Generate the 'check_password" method
-__PACKAGE__->add_columns(
-    'password' => {
-        passphrase       => 'rfc2307',
-        passphrase_class => 'SaltedDigest',
-        passphrase_args  => {
-            algorithm   => 'SHA-1',
-            salt_random => 20.
-        },
-        passphrase_check_method => 'check_password',
-    },
-);
-
-=head2 fullname
-
-Helper method to concatenate first name and last name.
-
-=cut
-sub fullname {
-    my ( $self ) = @_;
-
-    my $fullname = sprintf("%s %s", $self->first_name, $self->last_name);
-    warn "FN " . $fullname;
-    return $fullname;
-}
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

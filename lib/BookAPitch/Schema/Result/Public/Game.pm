@@ -1,18 +1,17 @@
 use utf8;
-package BookAPitch::Schema::Result::Game;
+package BookAPitch::Schema::Result::Public::Game;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-BookAPitch::Schema::Result::Game
+BookAPitch::Schema::Result::Public::Game
 
 =cut
 
 use strict;
 use warnings;
-use Data::Printer;
 
 use Moose;
 use MooseX::NonMoose;
@@ -128,88 +127,21 @@ __PACKAGE__->set_primary_key("id");
 
 Type: has_many
 
-Related object: L<BookAPitch::Schema::Result::GamePlayer>
+Related object: L<BookAPitch::Schema::Result::Public::GamePlayer>
 
 =cut
 
 __PACKAGE__->has_many(
   "game_players",
-  "BookAPitch::Schema::Result::GamePlayer",
+  "BookAPitch::Schema::Result::Public::GamePlayer",
   { "foreign.game_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07014 @ 2014-08-15 15:00:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YqsHOu/Pbyle5r82iYh8FA
+# Created by DBIx::Class::Schema::Loader v0.07014 @ 2014-10-04 18:00:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8D6oRsFEygSQYBmY0hbXug
 
-=head2 add_players_to_game
-
-Add players to a game, helper method.
-
-=cut
-sub add_players_to_game {
-    my ($self) = @_;
-
-    # Get all active users
-
-    my @users =
-        $self->result_source->schema->resultset('BookAPitch::Schema::Result::User')->active_users;
-
-    foreach my $user( @users) {
-        # Add players to game_players
-        $self->game_players->create({
-            game_id => $self->id,
-            player_id => $user->id,
-        });
-        warn "Adding user " . $user->email_address;
-    }
-}
-
-=head2 available_players
-
-Players that have confirmed that they are available
-
-=cut
-sub available_players {
-    my ($self) = @_;
-
-    my @available_players = $self->game_players->search({
-        player_status => 'AVAILABLE',
-    });
-
-    return \@available_players;
-}
-
-=head2 unavailable_players
-
-Players that have confirmed that they are unavailable
-
-=cut
-sub unavailable_players {
-    my ($self) = @_;
-
-    my @unavailable_players = $self->game_players->search({
-        player_status => 'UNAVAILABLE',
-    });
-
-    return \@unavailable_players;
-}
-
-=head2 pending_players
-
-Players that have failed to confirm whether they are available or unavailable.
-
-=cut
-sub pending_players {
-    my ($self) = @_;
-
-    my @pending_players = $self->game_players->search({
-        player_status => 'PENDING',
-    });
-
-    return \@pending_players;
-}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

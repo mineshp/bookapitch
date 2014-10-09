@@ -1,1 +1,5 @@
 Run script/bookapitch_server.pl to test the application.
+
+To regenerate schema files, run
+
+script/bookapitch_create.pl model BookAPitchDB DBIC::Schema BookAPitch::Schema create=static components=PassphraseColumn 'dbi:Pg:dbname=bookapitchdb' 'bookapitchuser' 'Wednesday730' '{ AutoCommit => 1 }'
