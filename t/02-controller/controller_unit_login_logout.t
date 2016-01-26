@@ -2,7 +2,7 @@
 # vim: ts=8 sts=4 et sw=4 sr sta
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More tests => 10;
 use Data::Printer;
 
 use FindBin::libs;
@@ -39,49 +39,41 @@ BEGIN {
 # User can access login page
 ok( request('/login')->is_success, 'Request to /login page is successful' );
 
-warn "ATTEMPT LOGIN WITH BAD DETAILS";
 use HTTP::Request::Common;
 my ($response, $c) = ctx_request POST '/login', [
     username => 'unknown_user',
     password => 'idontknow'
 ];
-warn "1. POST COMPLETE";
 
 # Check we have displayed bad username or password feedback message
-is($c->stash->{error_msg}, "Bad username or password.",
+is($c->stash->{error_msg}, "Username unknown_user does not exist, please check spelling!",
     "Unable to login, bad username or password entered");
 
 # Now attempt to setup a test user and attempt successful login.
 # Our test should insert our own data, we are not testing registration here
 # so insert into db.
 my $testuser = Test::SampleData->setup_test_user;
-warn "ATTEMPT LOGIN WITH GOOD DETAILS";
+
 my ($response_success, $c) = ctx_request POST '/login', [
     username => $testuser->username,
-    password => $testuser->password
+    password => 'password',
 ];
-warn "2. POST COMPLETE";
-isnt($c->stash->{error_msg}, undef, "No error returned from login");
 
-warn "RESP " . p $response_success->base;
+is($c->stash->{error_msg}, undef, "No error returned from login");
 
-warn "USER " . $testuser->username;
-warn "PASS " . $testuser->password;
+my $url = $response_success->header( 'location' )->as_string;
+is($url, "http://localhost/players/id/".$testuser->id."/view_profile",
+    "User successfully logged in, redirected to user profile");
 
-=pod
-ok( request('/blah')->is_redirect, 'Unable to access page blah, user redirected');
+ok( $c->user_exists, "User exists" );
 
-#!/usr/bin/perl
-# User can not view root of the application, without logging in.
-my $res = request('/'); # redirects to /login
+# Test logout
+my $res = request('/logout'); # redirects to /logout
+
 use URI;
 my $uri = URI->new($res->header('location'));
-# User is redirected to login page
-is( $uri->path, '/login');
+is ( $uri->path , '/login', 'User logged out, presented with login page');
 
-# User can access login page
-ok( request('/login')->is_success, 'Request to /login is successful' );
-
-# User can access new user registration page
-ok( request('/players/register')->is_success, 'Request to /players/register is successful' );
-=cut
+my $content = get($uri->path);
+like( $content, qr/You need to log in to use this application./,
+    'User asked to login to the application' );

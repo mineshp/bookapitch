@@ -66,6 +66,19 @@ __PACKAGE__->config(
         default => {
             class           => 'SimpleDB',
             user_model      => 'BookAPitchDB::User',
+            # self_check will only work if you have the following
+            # __PACKAGE__->add_columns(
+            #    'password' => {
+            #    passphrase       => 'rfc2307',
+            #    passphrase_class => 'SaltedDigest',
+            #    passphrase_args  => {
+            #        algorithm   => 'SHA-1',
+            #        salt_random => 20.
+            #    },
+            #    passphrase_check_method => 'check_password',
+            #    },
+            #);
+            # In your Schema::Result::Public::User
             password_type   => 'self_check',
         },
     },

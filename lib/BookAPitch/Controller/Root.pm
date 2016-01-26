@@ -64,7 +64,6 @@ sub auto :Private {
     # redirects the user back to login page
     # 2. You can access login and register
     # 3. User can be created
-    warn "PATH IS " . $c->request->path;
     if ( $c->request->path =~ /players\/(register|submit_registration|view_profile)/ ) {
         return 1;
     }
